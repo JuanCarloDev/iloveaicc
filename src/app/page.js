@@ -1,334 +1,248 @@
 "use client";
-
 import { useState } from "react";
 import { fetchSubcategories } from "./agents/AgentSubCategorieslc";
-import { Circle, CircleNotch } from "@phosphor-icons/react/dist/ssr";
-import { MagnifyingGlass } from "@phosphor-icons/react";
-
-import { fetchTopics2 } from "./agents/AgentTopicslc2";
+import { CircleNotch, MagnifyingGlass } from "@phosphor-icons/react";
+import SegmentCard from "./components/SegmentCard";
+import SubcategoryCard from "./components/SubcategoryCard";
+import TopicCard from "./components/TopicCard";
+import SearchBar from "./components/SearchBar";
+import { fetchTopics } from "./agents/AgentTopicslc";
+import { useAppContext } from "./AppContext";
 
 export default function Home() {
-  const [segmentSelected, setSegment] = useState("");
-  const [subcategories, setSubcategories] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [topicsSelected, setTopicsSelected] = useState([]);
-  const [subcategoriesSelected, setSubcategoriesSelected] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchTermSubcategory, setSearchTermSubcategory] = useState("");
-  const [searchTermTopic, setSearchTermTopic] = useState("");
+  const {
+    state: {
+      segmentSelected,
+      subcategories,
+      topics,
+      topicsSelected,
+      subcategoriesSelected,
+      loading,
+      step,
+      searchTerm,
+      searchTermSubcategory,
+      searchTermTopic,
+    },
+    handleSegmentClick,
+    handleSelection,
+    handleSubcategoriesSubmit,
+    filteredItems,
+  } = useAppContext();
 
-  // STEP 1 SEGMENT -> SUBCATEGORIES
-  const handleSegmentClick = async (segment) => {
-    /*  setSegment(segment); */
-    setLoading(true);
-    setSubcategories([]);
+  console.log(filteredItems(subcategories, searchTermSubcategory));
+  console.log(subcategories);
 
-    try {
-      const subcategoriesList = await fetchSubcategories(segmentSelected.name);
-      setSubcategories(subcategoriesList);
-      setStep(2);
-    } catch (error) {
-      console.error("Failed to fetch subcategories:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  console.log(filteredItems(topics, searchTermTopic));
+  console.log(topics);
 
-  // STEP 2 SUBCATEGORIES -> TOPICS
+  console.log(segmentSelected);
 
-  const handleSubcategoryClick = (subcategory) => {
-    setSubcategoriesSelected((prevSelected) => {
-      if (prevSelected.includes(subcategory)) {
-        // Remove a subcategoria se já estiver selecionada
-        return prevSelected.filter((item) => item !== subcategory);
-      } else {
-        // Verifica se o número máximo de 3 subcategorias já foi alcançado
-        if (prevSelected.length >= 3) {
-          // Exibe uma mensagem de aviso ou simplesmente retorna o array existente
-          /* alert("Você só pode selecionar até 3 subcategorias."); */
-          return prevSelected;
-        } else {
-          // Adiciona a nova subcategoria se o limite não foi alcançado
-          return [...prevSelected, subcategory];
-        }
-      }
-    });
-  };
-
-  const handleSubcategoriesSubmit = async () => {
-    setLoading(true);
-
-    try {
-      const topicsArray = await fetchTopics2(subcategoriesSelected);
-      setTopics(topicsArray);
-      setStep(3);
-    } catch (error) {
-      console.error("Failed to fetch topics:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // SET STEP 3 TOPICS -> ROTEIRO
-
-  const handleTopicClick = (topic) => {
-    setTopicsSelected((prevSelected) => {
-      if (prevSelected.includes(topic)) {
-        // Remove a subcategoria se já estiver selecionada
-        return prevSelected.filter((item) => item !== topic);
-      } else {
-        // Verifica se o número máximo de 3 subcategorias já foi alcançado
-        if (prevSelected.length >= 3) {
-          // Exibe uma mensagem de aviso ou simplesmente retorna o array existente
-          /* alert("Você só pode selecionar até 3 subcategorias."); */
-          return prevSelected;
-        } else {
-          // Adiciona a nova subcategoria se o limite não foi alcançado
-          return [...prevSelected, topic];
-        }
-      }
-    });
-  };
-
-  // Função de filtro para segmentos
-  const filteredSegments = segments.segments.filter((segment) =>
-    segment.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Função de filtro para subcategorias
-  const filteredSubcategories = subcategories.filter((subcategory) =>
-    subcategory.toLowerCase().includes(searchTermSubcategory.toLowerCase())
-  );
-
-  const filteredTopics = topics.filter((topic) =>
-    topic.toLowerCase().includes(searchTermTopic.toLowerCase())
-  );
+  const animationDelay = 150;
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-white px-6 pb-20">
-      <div className={`flex w-full max-w-5xl py-10`}>
+      <div className="flex w-full max-w-5xl py-10">
         <a href="/">
-          <img src="/wowmi.svg" className={`w-30`} />
+          <img
+            data-aos="fade"
+            data-aos-delay={0 * animationDelay}
+            data-aos-offset={0}
+            src="/wowmi.svg"
+            className="w-30"
+          />
         </a>
       </div>
 
-      {/* STEP 1 - segments */}
       {step === 1 && (
         <>
-          <div className={`flex w-full h-full max-w-5xl py-2`}>
-            <h1 className={`text-black/80 font-semibold text-2xl`}>
+          <div className="flex flex-col gap-2 w-full h-full max-w-5xl py-2">
+            <h1
+              data-aos="fade"
+              data-aos-delay={1 * animationDelay}
+              data-aos-offset={0}
+              className="text-black/80 font-semibold text-2xl"
+            >
               Select Your Industry
             </h1>
-          </div>
-          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
-            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
-              <MagnifyingGlass className="text-gray-500 mr-2" />
-              <input
-                type="text"
-                placeholder="Search segments..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border-0 w-full text-black/80 outline-none"
-              />
-            </div>
-          </div>
-          <div
-            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
-          >
-            {filteredSegments.map((segment) => (
-              <div
-                onClick={() => setSegment(segment)}
-                key={segment.id}
-                className={`flex w-full h-full max-w-5xl col-span-4 lg:col-span-1 px-4 border py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
-                  segmentSelected.name === segment.name
-                    ? "bg-[#725df5] text-white"
-                    : "border-zinc-200 text-zinc-700"
-                }`}
-              >
-                <h1 className={` font-semibold`}>{segment.name}</h1>
-              </div>
-            ))}
-          </div>
-          <div
-            onClick={() => {
-              if (segmentSelected !== "") {
-                handleSegmentClick();
-              }
-            }}
-            className={`flex justify-end w-full max-w-5xl`}
-          >
-            <div
-              className={`cursor-pointer ${
-                segmentSelected !== "" ? "bg-[#725df5]" : "bg-zinc-300"
-              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
-            >
-              {loading ? (
-                <>
-                  <CircleNotch
-                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+            <SearchBar
+              data-aos="fade"
+              data-aos-delay={2 * animationDelay}
+              data-aos-offset={0}
+              searchTerm={searchTerm}
+              setSearchTerm={(term) => setState({ ...state, searchTerm: term })}
+            />
+            <div className="grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4">
+              {filteredItems(segments.segments, searchTerm, "name").map(
+                (segment, index) => (
+                  <SegmentCard
+                    data-aos="fade"
+                    data-aos-delay={index * 150}
+                    data-aos-offset={0}
+                    key={segment.id}
+                    segment={segment}
+                    onClick={() => handleSelection(segment, "segmentSelected")}
+                    isSelected={
+                      segmentSelected && segmentSelected.id === segment.id
+                    }
                   />
-                </>
-              ) : (
-                <>
-                  <p>next</p>
-                </>
+                )
               )}
+            </div>
+            <div
+              data-aos="fade"
+              data-aos-delay={5 * animationDelay}
+              data-aos-offset={0}
+              className={`w-full flex justify-end max-w-5xl`}
+            >
+              <button
+                disabled={!segmentSelected}
+                onClick={() => {
+                  segmentSelected && handleSegmentClick(segmentSelected);
+                }}
+                className={`flex justify-end w-fit max-w-5xl ${
+                  loading || !segmentSelected ? "bg-zinc-300" : "bg-[#725df5]"
+                } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px] transition-all duration-500`}
+              >
+                {loading ? (
+                  <CircleNotch className="animate-spin h-6 opacity-20 w-6 text-white" />
+                ) : (
+                  <p>next</p>
+                )}
+              </button>
             </div>
           </div>
         </>
       )}
 
-      {/* STEP 2 - subcategories */}
       {step === 2 && (
         <>
-          <div
-            className={`flex w-full h-full max-w-5xl py-2 justify-between items-center`}
-          >
-            <h1 className={`text-black/80 font-semibold text-2xl`}>
-              Select Subcategories
-            </h1>
-            <p
-              className={`text-black/50 font-semibold text-md ${
-                subcategoriesSelected.length < 3
-                  ? "text-black/50"
-                  : "text-green-800"
-              }`}
-            >
-              {subcategoriesSelected.length}/3
-            </p>
-          </div>
-          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
-            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
-              <MagnifyingGlass className="text-gray-500 mr-2" />
-              <input
-                type="text"
-                placeholder="Search subcategories..."
-                value={searchTermSubcategory}
-                onChange={(e) => setSearchTermSubcategory(e.target.value)}
-                className="border-0 w-full text-black/80 outline-none"
-              />
-            </div>
-          </div>
-          <div
-            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
-          >
-            {filteredSubcategories.map((subcategory) => (
-              <div
-                onClick={() => handleSubcategoryClick(subcategory)}
-                key={subcategory.id}
-                className={`flex w-full h-full max-w-5xl px-4 border col-span-4 lg:col-span-1 py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
-                  subcategoriesSelected.includes(subcategory)
-                    ? "bg-[#725df5] text-white"
-                    : "border-zinc-200 text-zinc-700"
-                }`}
+          <div className="flex flex-col gap-2 w-full h-full max-w-5xl py-2">
+            <div className={`flex  justify-between items-center`}>
+              <h1
+                data-aos="fade"
+                data-aos-delay={1 * animationDelay}
+                data-aos-offset={0}
+                className="text-black/80 font-semibold text-2xl"
               >
-                <h1 className={` font-semibold`}>{subcategory}</h1>
+                Select Subcategories
+              </h1>
+              <div
+                data-aos="fade"
+                data-aos-delay={2 * animationDelay}
+                data-aos-offset={0}
+                className={``}
+              >
+                <p
+                  className={`text-black/50 font-semibold text-md ${
+                    subcategoriesSelected.length >= 3 ? "text-green-800" : ""
+                  }`}
+                >
+                  {subcategoriesSelected.length}/3
+                </p>
               </div>
-            ))}
-          </div>
-          <div
-            onClick={() => {
-              if (subcategoriesSelected.length > 0) {
-                handleSubcategoriesSubmit();
+            </div>
+            <SearchBar
+              data-aos="fade"
+              data-aos-delay={3 * animationDelay}
+              data-aos-offset={0}
+              searchTerm={searchTermSubcategory}
+              setSearchTerm={(term) =>
+                setState({ ...state, searchTermSubcategory: term })
               }
-            }}
-            className={`flex justify-end w-full max-w-5xl mt-4`}
-          >
-            <div
-              className={`cursor-pointer ${
-                subcategoriesSelected.length > 0
-                  ? "bg-[#725df5]"
-                  : "bg-zinc-300"
-              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
-            >
-              {loading ? (
-                <>
-                  <CircleNotch
-                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+            />
+            <div className="grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4">
+              {filteredItems(subcategories, searchTermSubcategory).map(
+                (subcategory, index) => (
+                  <SubcategoryCard
+                    data-aos="fade"
+                    data-aos-delay={index * 150}
+                    data-aos-offset={0}
+                    key={subcategory.id}
+                    subcategory={subcategory}
+                    onClick={() =>
+                      handleSelection(subcategory, "subcategoriesSelected")
+                    }
+                    isSelected={subcategoriesSelected.includes(subcategory)}
                   />
-                </>
-              ) : (
-                <>
-                  <p>next</p>
-                </>
+                )
               )}
+            </div>
+            <div className={`w-full flex justify-end max-w-5xl`}>
+              <button
+                disabled={subcategoriesSelected.length === 0}
+                onClick={() => {
+                  handleSubcategoriesSubmit();
+                }}
+                className={`flex justify-end w-fit max-w-5xl mt-4 ${
+                  subcategoriesSelected.length > 0
+                    ? "bg-[#725df5]"
+                    : "bg-zinc-300"
+                } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
+              >
+                {loading ? (
+                  <CircleNotch className="animate-spin h-6 opacity-20 w-6 text-white" />
+                ) : (
+                  <p>next</p>
+                )}
+              </button>
             </div>
           </div>
         </>
       )}
 
-      {/* STEP 3 - topics */}
       {step === 3 && (
         <>
-          <div
-            className={`flex w-full h-full max-w-5xl py-2 justify-between items-center`}
-          >
-            <h1 className={`text-black/80 font-semibold text-2xl`}>
+          <div className="flex w-full h-full max-w-5xl py-2 flex-col">
+            <h1 className="text-black/80 font-semibold text-2xl">
               Select Topics
             </h1>
-            <p
+            {/* <p
               className={`text-black/50 font-semibold text-md ${
-                topicsSelected.length < 3 ? "text-black/50" : "text-green-800"
+                topicsSelected.length >= 3 ? "text-green-800" : ""
               }`}
             >
               {topicsSelected.length}/3
-            </p>
-          </div>
-          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
-            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
-              <MagnifyingGlass className="text-gray-500 mr-2" />
-              <input
-                type="text"
-                placeholder="Search topics..."
-                value={searchTermTopic}
-                onChange={(e) => setSearchTermTopic(e.target.value)}
-                className="border-0 w-full text-black/80 outline-none"
-              />
-            </div>
-          </div>
-          <div
-            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
-          >
-            {filteredTopics.map((topic) => (
-              <div
-                onClick={() => handleTopicClick(topic)}
-                key={topic.id}
-                className={`flex w-full h-full max-w-5xl px-4 border col-span-4 lg:col-span-1 py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
-                  topicsSelected.includes(topic)
-                    ? "bg-[#725df5] text-white"
-                    : "border-zinc-200 text-zinc-700"
-                }`}
-              >
-                <h1 className={` font-semibold`}>{topic}</h1>
-              </div>
-            ))}
-          </div>
-          <div
-            onClick={() => {
-              if (topicsSelected.length > 0) {
-                handleTopicsSubmit();
+            </p> */}
+            <SearchBar
+              searchTerm={searchTermTopic}
+              setSearchTerm={(term) =>
+                setState({ ...state, searchTermTopic: term })
               }
-            }}
-            className={`flex justify-end w-full max-w-5xl mt-4`}
-          >
-            <div
-              className={`cursor-pointer ${
-                topicsSelected.length > 0 ? "bg-[#725df5]" : "bg-zinc-300"
-              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
-            >
-              {loading ? (
-                <>
-                  <CircleNotch
-                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+            />
+            <div className="grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4">
+              {filteredItems(topics, searchTermTopic, "subtopic").map(
+                (topic, index) => (
+                  <TopicCard
+                    data-aos="fade"
+                    data-aos-delay={index * 150}
+                    data-aos-offset={0}
+                    key={topic.id}
+                    topic={topic}
+                    onClick={() => handleSelection(topic, "topicsSelected")}
+                    isSelected={topicsSelected.includes(topic)}
                   />
-                </>
-              ) : (
-                <>
-                  <p>next</p>
-                </>
+                )
               )}
+            </div>
+            <div
+              data-aos="fade"
+              data-aos-delay={150}
+              data-aos-offset={0}
+              className={`w-full flex justify-end max-w-5xl`}
+            >
+              <button
+                disabled={topicsSelected?.length === 0}
+                onClick={handleSubcategoriesSubmit}
+                className={`flex justify-end w-fit max-w-5xl mt-4 ${
+                  topicsSelected?.length > 0 ? "bg-[#725df5]" : "bg-zinc-300"
+                } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
+              >
+                {loading ? (
+                  <CircleNotch className="animate-spin h-6 opacity-20 w-6 text-white" />
+                ) : (
+                  <p>Submit</p>
+                )}
+              </button>
             </div>
           </div>
         </>
@@ -340,7 +254,7 @@ export default function Home() {
 const segments = {
   segments: [
     {
-      id: 1,
+      id: 0,
       name: "Mortgage",
       description:
         "Segment focused on technology advancements and innovations.",
@@ -349,7 +263,7 @@ const segments = {
       id: 1,
       name: "Technology",
       description:
-        "Segment focused on technology advancements and innovations.",
+        "Segment focused on technology advancements and innovations22.",
     },
     {
       id: 2,
