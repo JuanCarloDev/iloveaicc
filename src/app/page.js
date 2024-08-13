@@ -1,113 +1,403 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { fetchSubcategories } from "./agents/AgentSubCategorieslc";
+import { Circle, CircleNotch } from "@phosphor-icons/react/dist/ssr";
+import { MagnifyingGlass } from "@phosphor-icons/react";
+
+import { fetchTopics2 } from "./agents/AgentTopicslc2";
 
 export default function Home() {
+  const [segmentSelected, setSegment] = useState("");
+  const [subcategories, setSubcategories] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [topicsSelected, setTopicsSelected] = useState([]);
+  const [subcategoriesSelected, setSubcategoriesSelected] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTermSubcategory, setSearchTermSubcategory] = useState("");
+  const [searchTermTopic, setSearchTermTopic] = useState("");
+
+  // STEP 1 SEGMENT -> SUBCATEGORIES
+  const handleSegmentClick = async (segment) => {
+    /*  setSegment(segment); */
+    setLoading(true);
+    setSubcategories([]);
+
+    try {
+      const subcategoriesList = await fetchSubcategories(segmentSelected.name);
+      setSubcategories(subcategoriesList);
+      setStep(2);
+    } catch (error) {
+      console.error("Failed to fetch subcategories:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // STEP 2 SUBCATEGORIES -> TOPICS
+
+  const handleSubcategoryClick = (subcategory) => {
+    setSubcategoriesSelected((prevSelected) => {
+      if (prevSelected.includes(subcategory)) {
+        // Remove a subcategoria se já estiver selecionada
+        return prevSelected.filter((item) => item !== subcategory);
+      } else {
+        // Verifica se o número máximo de 3 subcategorias já foi alcançado
+        if (prevSelected.length >= 3) {
+          // Exibe uma mensagem de aviso ou simplesmente retorna o array existente
+          /* alert("Você só pode selecionar até 3 subcategorias."); */
+          return prevSelected;
+        } else {
+          // Adiciona a nova subcategoria se o limite não foi alcançado
+          return [...prevSelected, subcategory];
+        }
+      }
+    });
+  };
+
+  const handleSubcategoriesSubmit = async () => {
+    setLoading(true);
+
+    try {
+      const topicsArray = await fetchTopics2(subcategoriesSelected);
+      setTopics(topicsArray);
+      setStep(3);
+    } catch (error) {
+      console.error("Failed to fetch topics:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // SET STEP 3 TOPICS -> ROTEIRO
+
+  const handleTopicClick = (topic) => {
+    setTopicsSelected((prevSelected) => {
+      if (prevSelected.includes(topic)) {
+        // Remove a subcategoria se já estiver selecionada
+        return prevSelected.filter((item) => item !== topic);
+      } else {
+        // Verifica se o número máximo de 3 subcategorias já foi alcançado
+        if (prevSelected.length >= 3) {
+          // Exibe uma mensagem de aviso ou simplesmente retorna o array existente
+          /* alert("Você só pode selecionar até 3 subcategorias."); */
+          return prevSelected;
+        } else {
+          // Adiciona a nova subcategoria se o limite não foi alcançado
+          return [...prevSelected, topic];
+        }
+      }
+    });
+  };
+
+  // Função de filtro para segmentos
+  const filteredSegments = segments.segments.filter((segment) =>
+    segment.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Função de filtro para subcategorias
+  const filteredSubcategories = subcategories.filter((subcategory) =>
+    subcategory.toLowerCase().includes(searchTermSubcategory.toLowerCase())
+  );
+
+  const filteredTopics = topics.filter((topic) =>
+    topic.toLowerCase().includes(searchTermTopic.toLowerCase())
+  );
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex min-h-screen flex-col items-center bg-white px-6 pb-20">
+      <div className={`flex w-full max-w-5xl py-10`}>
+        <a href="/">
+          <img src="/wowmi.svg" className={`w-30`} />
+        </a>
+      </div>
+
+      {/* STEP 1 - segments */}
+      {step === 1 && (
+        <>
+          <div className={`flex w-full h-full max-w-5xl py-2`}>
+            <h1 className={`text-black/80 font-semibold text-2xl`}>
+              Select Your Industry
+            </h1>
+          </div>
+          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
+            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
+              <MagnifyingGlass className="text-gray-500 mr-2" />
+              <input
+                type="text"
+                placeholder="Search segments..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border-0 w-full text-black/80 outline-none"
+              />
+            </div>
+          </div>
+          <div
+            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            {filteredSegments.map((segment) => (
+              <div
+                onClick={() => setSegment(segment)}
+                key={segment.id}
+                className={`flex w-full h-full max-w-5xl col-span-4 lg:col-span-1 px-4 border py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
+                  segmentSelected.name === segment.name
+                    ? "bg-[#725df5] text-white"
+                    : "border-zinc-200 text-zinc-700"
+                }`}
+              >
+                <h1 className={` font-semibold`}>{segment.name}</h1>
+              </div>
+            ))}
+          </div>
+          <div
+            onClick={() => {
+              if (segmentSelected !== "") {
+                handleSegmentClick();
+              }
+            }}
+            className={`flex justify-end w-full max-w-5xl`}
+          >
+            <div
+              className={`cursor-pointer ${
+                segmentSelected !== "" ? "bg-[#725df5]" : "bg-zinc-300"
+              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
+            >
+              {loading ? (
+                <>
+                  <CircleNotch
+                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+                  />
+                </>
+              ) : (
+                <>
+                  <p>next</p>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      {/* STEP 2 - subcategories */}
+      {step === 2 && (
+        <>
+          <div
+            className={`flex w-full h-full max-w-5xl py-2 justify-between items-center`}
+          >
+            <h1 className={`text-black/80 font-semibold text-2xl`}>
+              Select Subcategories
+            </h1>
+            <p
+              className={`text-black/50 font-semibold text-md ${
+                subcategoriesSelected.length < 3
+                  ? "text-black/50"
+                  : "text-green-800"
+              }`}
+            >
+              {subcategoriesSelected.length}/3
+            </p>
+          </div>
+          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
+            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
+              <MagnifyingGlass className="text-gray-500 mr-2" />
+              <input
+                type="text"
+                placeholder="Search subcategories..."
+                value={searchTermSubcategory}
+                onChange={(e) => setSearchTermSubcategory(e.target.value)}
+                className="border-0 w-full text-black/80 outline-none"
+              />
+            </div>
+          </div>
+          <div
+            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
+          >
+            {filteredSubcategories.map((subcategory) => (
+              <div
+                onClick={() => handleSubcategoryClick(subcategory)}
+                key={subcategory.id}
+                className={`flex w-full h-full max-w-5xl px-4 border col-span-4 lg:col-span-1 py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
+                  subcategoriesSelected.includes(subcategory)
+                    ? "bg-[#725df5] text-white"
+                    : "border-zinc-200 text-zinc-700"
+                }`}
+              >
+                <h1 className={` font-semibold`}>{subcategory}</h1>
+              </div>
+            ))}
+          </div>
+          <div
+            onClick={() => {
+              if (subcategoriesSelected.length > 0) {
+                handleSubcategoriesSubmit();
+              }
+            }}
+            className={`flex justify-end w-full max-w-5xl mt-4`}
+          >
+            <div
+              className={`cursor-pointer ${
+                subcategoriesSelected.length > 0
+                  ? "bg-[#725df5]"
+                  : "bg-zinc-300"
+              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
+            >
+              {loading ? (
+                <>
+                  <CircleNotch
+                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+                  />
+                </>
+              ) : (
+                <>
+                  <p>next</p>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      {/* STEP 3 - topics */}
+      {step === 3 && (
+        <>
+          <div
+            className={`flex w-full h-full max-w-5xl py-2 justify-between items-center`}
+          >
+            <h1 className={`text-black/80 font-semibold text-2xl`}>
+              Select Topics
+            </h1>
+            <p
+              className={`text-black/50 font-semibold text-md ${
+                topicsSelected.length < 3 ? "text-black/50" : "text-green-800"
+              }`}
+            >
+              {topicsSelected.length}/3
+            </p>
+          </div>
+          <div className={`flex w-full h-full max-w-5xl py-2 gap-5 mt-4`}>
+            <div className="flex items-center border px-4 py-2 rounded-md w-full text-black/80 outline-[#725df5]">
+              <MagnifyingGlass className="text-gray-500 mr-2" />
+              <input
+                type="text"
+                placeholder="Search topics..."
+                value={searchTermTopic}
+                onChange={(e) => setSearchTermTopic(e.target.value)}
+                className="border-0 w-full text-black/80 outline-none"
+              />
+            </div>
+          </div>
+          <div
+            className={`grid grid-cols-4 w-full h-full max-w-5xl py-2 gap-5 mt-4`}
+          >
+            {filteredTopics.map((topic) => (
+              <div
+                onClick={() => handleTopicClick(topic)}
+                key={topic.id}
+                className={`flex w-full h-full max-w-5xl px-4 border col-span-4 lg:col-span-1 py-4 rounded-md hover:border-[#725df560] hover:scale-[101%] transition-all duration-300 cursor-pointer ${
+                  topicsSelected.includes(topic)
+                    ? "bg-[#725df5] text-white"
+                    : "border-zinc-200 text-zinc-700"
+                }`}
+              >
+                <h1 className={` font-semibold`}>{topic}</h1>
+              </div>
+            ))}
+          </div>
+          <div
+            onClick={() => {
+              if (topicsSelected.length > 0) {
+                handleTopicsSubmit();
+              }
+            }}
+            className={`flex justify-end w-full max-w-5xl mt-4`}
+          >
+            <div
+              className={`cursor-pointer ${
+                topicsSelected.length > 0 ? "bg-[#725df5]" : "bg-zinc-300"
+              }  text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
+            >
+              {loading ? (
+                <>
+                  <CircleNotch
+                    className={`animate-spin h-6 opacity-20 w-6 text-white`}
+                  />
+                </>
+              ) : (
+                <>
+                  <p>next</p>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </main>
   );
 }
+
+const segments = {
+  segments: [
+    {
+      id: 1,
+      name: "Mortgage",
+      description:
+        "Segment focused on technology advancements and innovations.",
+    },
+    {
+      id: 1,
+      name: "Technology",
+      description:
+        "Segment focused on technology advancements and innovations.",
+    },
+    {
+      id: 2,
+      name: "Health & Wellness",
+      description:
+        "Segment centered around health, fitness, and overall well-being.",
+    },
+    {
+      id: 3,
+      name: "Finance",
+      description:
+        "Segment dedicated to financial management, investments, and economic trends.",
+    },
+    {
+      id: 4,
+      name: "Education",
+      description:
+        "Segment focused on learning, teaching methods, and educational tools.",
+    },
+    {
+      id: 5,
+      name: "Entertainment",
+      description:
+        "Segment focused on movies, music, games, and other forms of entertainment.",
+    },
+    {
+      id: 6,
+      name: "Travel & Tourism",
+      description:
+        "Segment dedicated to travel destinations, tips, and tourism trends.",
+    },
+    {
+      id: 7,
+      name: "Lifestyle",
+      description:
+        "Segment centered around fashion, culture, and everyday living.",
+    },
+    {
+      id: 8,
+      name: "Food & Beverage",
+      description:
+        "Segment focused on culinary arts, dining experiences, and beverage trends.",
+    },
+    {
+      id: 9,
+      name: "Real Estate",
+      description:
+        "Segment dedicated to property management, real estate markets, and housing trends.",
+    },
+  ],
+};
