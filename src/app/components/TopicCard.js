@@ -113,14 +113,14 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
       >
         <div className={` flex gap-1 right-4 top-4 mb-2`}>
           {Array.from({ length: 5 }).map((_, index) => (
-            <Star weight="fill" className={`text-yellow-400`} />
+            <Star key={index} weight="fill" className={`text-yellow-400`} />
           ))}
         </div>
         <h2 className="font-semibold text-lg">{topic.subtopic}</h2>
         <h4 className="text-md text-black/50">{topic.description}</h4>
 
         <p className={`mt-4 font-semibold text-black/80`}>Generate scripts</p>
-        <div className={`flex justify-between items-center mt-3`}>
+        <div className={`flex justify-between items-center mt-1`}>
           <div
             className={`flex flex-wrap md:flex-row gap-2 md:items-center mt-3`}
           >
