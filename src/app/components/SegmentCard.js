@@ -7,7 +7,7 @@ export default function SegmentCard({
   ...props
 }) {
   return (
-    <div {...props}>
+    <div className={` col-span-4 lg:col-span-1`} {...props}>
       <div
         onClick={onClick}
         className={`p-4 border rounded-lg cursor-pointer ${
