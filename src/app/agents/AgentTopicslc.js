@@ -3,7 +3,7 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
 export async function fetchTopics(subcategories) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
   // Encapsulando o array de tópicos em um objeto chamado 'topics'.
