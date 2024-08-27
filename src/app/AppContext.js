@@ -76,7 +76,7 @@ export const AppProvider = ({ children }) => {
   };
 
   const filteredItems = (items, searchTerm, key) => {
-    return items.filter((item) => {
+    return items?.filter((item) => {
       if (typeof item === "object" && key) {
         return (
           typeof item[key] === "string" &&

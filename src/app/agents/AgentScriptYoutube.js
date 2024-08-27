@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export async function AgentScriptYoutube(topic) {
   const apiKey =
-    "sk-j_2eBthb5QZMdShxX1ZJ6mAjYpQ3UFn-cxRAF9tm3oT3BlbkFJBN_pEDNf4_4SPIEcV-4FtqfJx6aFC3hp7nZ1XU6ZYA";
+    "sk-0LuQrvaVIBQvW2Ruevxu3vE-floqkPAr_bj049NHwKT3BlbkFJocz3X1IC9URgbF5L4dDbmjessUMh1OllBfpVUBOVAA";
 
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
