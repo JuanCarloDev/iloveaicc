@@ -3,8 +3,7 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
 export async function AgentScriptTikTok(topic) {
-  const apiKey =
-    "sk-j_2eBthb5QZMdShxX1ZJ6mAjYpQ3UFn-cxRAF9tm3oT3BlbkFJBN_pEDNf4_4SPIEcV-4FtqfJx6aFC3hp7nZ1XU6ZYA";
+   const apiKey = process.env.OPENAI_API_KEY;
 
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
