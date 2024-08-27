@@ -18,20 +18,18 @@ export async function AgentScriptYoutube(topic) {
       messages: [
         {
           role: "system",
-          content: `
-      Generate a detailed script for a long YouTube video based on the following topic:
-      ${topic.subtopic}. Description: ${topic.description}.
-      The script should be engaging, informative, and well-structured for a YouTube audience. Please include the following sections:
-      - **Introduction**: Start with a compelling hook and introduce the topic.
-      - **Main Content**: Break down the topic into clear, well-organized sections. Use headings, bullet points, and examples to make the content easy to follow.
-      - **Conclusion**: Summarize the key points, provide a call to action, and encourage viewers to like, comment, and subscribe.
-      - **Additional Tips**: Provide any additional tips or insights that may be relevant to the audience.
-      Format the script with clear headings, bullet points, and line breaks. I will use the library 'marked' to handle formatting, so include bold text and line breaks where necessary.
-    `,
+          content: `次のトピックに基づいて、長い YouTube ビデオの詳細なスクリプトを生成します。
+ ${topic.topic}。説明: ${topic.description}。
+ スクリプトは、YouTube 視聴者にとって魅力的で有益で、適切に構成されている必要があります。次のセクションを含めてください。
+ - **はじめに**: 説得力のあるフックから始めて、トピックを紹介します。
+ - **メインコンテンツ**: トピックを明確でよく整理されたセクションに分割します。見出し、箇条書き、例を使用して、コンテンツを理解しやすくします。
+ - **結論**: 重要なポイントを要約し、行動喚起を提供し、視聴者に「いいね！」、コメント、チャンネル登録するよう促します。
+ - **追加のヒント**: 視聴者に関連する可能性のある追加のヒントや洞察を提供します。
+ 明確な見出し、箇条書き、改行を使用してスクリプトをフォーマットします。 「マークされた」ライブラリを使用して書式設定を処理するため、必要に応じて太字のテキストと改行を含めます。`,
         },
         {
           role: "user",
-          content: `Generate a detailed YouTube script for the following topic: ${topic.subtopic}.`,
+          content: `次のトピックに関する詳細な YouTube スクリプトを生成します。 ${topic.subtopic}.`,
         },
       ],
       response_format: zodResponseFormat(ScriptResponse, "event"),

@@ -18,15 +18,14 @@ export async function AgentScriptTikTok(topic) {
       messages: [
         {
           role: "system",
-          content: `
-      Generate a script for TikTok based on the following topic:
-      ${topic.subtopic}. Description: ${topic.description}.
-      The script should be engaging and relevant for TikTok. Please format the script with clear headings, bullet points, and line breaks to make it easy to read. i will use the libary marked to formatting, so do bolds and jump lines.
+          content: `次のトピックに基づいて TikTok 用のスクリプトを生成します。
+ ${topic.subtopic}。説明: ${topic.description}。
+ スクリプトは魅力的で、TikTok に関連したものでなければなりません。読みやすいように、明確な見出し、箇条書き、改行を使用してスクリプトをフォーマットしてください。私はフォーマットするようにマークされたライブラリを使用し、太字とジャンプ行のみを実行します。
     `,
         },
         {
           role: "user",
-          content: `Generate a TikTok script for the following topic: ${topic.subtopic}.`,
+          content: `次のトピックの TikTok スクリプトを生成します。${topic.subtopic}.`,
         },
       ],
       response_format: zodResponseFormat(ScriptResponse, "event"),

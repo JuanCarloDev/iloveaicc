@@ -3,7 +3,7 @@ import { LLMChain } from "langchain/chains";
 import { PromptTemplate } from "@langchain/core/prompts";
 
 export async function fetchSubcategories(segmentName) {
- const apiKey =
+  const apiKey =
     "sk-j_2eBthb5QZMdShxX1ZJ6mAjYpQ3UFn-cxRAF9tm3oT3BlbkFJBN_pEDNf4_4SPIEcV-4FtqfJx6aFC3hp7nZ1XU6ZYA";
 
   const chat = new OpenAI({
@@ -14,10 +14,10 @@ export async function fetchSubcategories(segmentName) {
   const promptTemplate = new PromptTemplate({
     inputVariables: ["segmentName"],
     template: `
-      You are a helpful assistant that provides relevant subcategories for a specific segment. 
-      Please provide a JSON with 15 relevant subcategories for the segment "{segmentName}". 
-      IMPORTANT: DO NOT RETURN CATEGORIES A, B, C. ACTUALLY FIND RELEVANT SUBCATEGORIES BASED ON THE SEGMENT. 
-      OTHERWISE, YOU WILL BE FINED $100,000.
+     あなたは、特定のセグメントに関連するサブカテゴリを提供する便利なアシスタントです。
+ セグメント「{segmentName}」に関連する 15 個のサブカテゴリを含む JSON を提供してください。
+ 重要: カテゴリ A、B、C を返さないでください。実際には、セグメントに基づいて関連するサブカテゴリを検索してください。
+ そうしないと、100,000 ドルが支払われてしまいます。
     `,
   });
 

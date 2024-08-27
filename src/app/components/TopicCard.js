@@ -108,7 +108,7 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
       <div
         /* onClick={onClick} */
         className={`p-4 border relative rounded-lg cursor-pointer col-span-4 ${
-          isSelected ? "bg-[#725df5] text-white" : "bg-white text-black"
+          isSelected ? "bg-[#ff4b21] text-white" : "bg-white text-black"
         }`}
       >
         <div className={` flex gap-1 right-4 top-4 mb-2`}>
@@ -119,17 +119,19 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
         <h2 className="font-semibold text-lg">{topic.subtopic}</h2>
         <h4 className="text-md text-black/50">{topic.description}</h4>
 
-        <p className={`mt-4 font-semibold text-black/80`}>Generate scripts</p>
+        <p className={`mt-4 font-semibold text-black/80`}>
+          スクリプトを生成する
+        </p>
         <div className={`flex justify-between items-center mt-1`}>
           <div
             className={`flex flex-wrap md:flex-row gap-2 md:items-center mt-3`}
           >
             <button
               onClick={handleScriptClick}
-              className={` w-fit max-w-5xl  bg-[#725df5] border border-gray-100 text-white font-semibold flex justify-center items-center py-1 px-2 rounded-lg min-w-[120px] text-sm`}
+              className={` w-fit max-w-5xl  bg-[#ff4b21] border border-gray-100 text-white font-semibold flex justify-center items-center py-1 px-2 rounded-lg min-w-[120px] text-sm`}
             >
               <div className={`flex justify-center items-center gap-1`}>
-                Default <Lightning weight="fill" className={`text-white`} />
+                デフォルト <Lightning weight="fill" className={`text-white`} />
               </div>
             </button>
             <button
@@ -180,7 +182,7 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
                 )}
                 <p className={`font-semibold text-black/80`}>
                   {" "}
-                  Scripts Generated
+                  生成されたスクリプト
                 </p>
               </div>
             </div>
@@ -197,7 +199,7 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
                     formattedScript === "" && "hidden"
                   } ${
                     view === "default"
-                      ? "bg-[#725df5] text-white border-0"
+                      ? "bg-[#ff4b21] text-white border-0"
                       : "text-black/60"
                   }`}
                   onClick={() => setView("default")}
@@ -209,7 +211,7 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
                     formattedScriptTikTok === "" && "hidden"
                   } ${
                     view === "tiktok"
-                      ? "bg-[#725df5] text-white border-0"
+                      ? "bg-[#ff4b21] text-white border-0"
                       : "text-black/60"
                   }`}
                   onClick={() => setView("tiktok")}
@@ -221,7 +223,7 @@ export default function TopicCard({ topic, onClick, isSelected, ...props }) {
                     formattedScriptYoutube === "" && "hidden"
                   } ${
                     view === "youtube"
-                      ? "bg-[#725df5] text-white border-0"
+                      ? "bg-[#ff4b21] text-white border-0"
                       : " text-black/60"
                   }`}
                   onClick={() => setView("youtube")}

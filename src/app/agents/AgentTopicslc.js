@@ -26,21 +26,19 @@ export async function fetchTopics(subcategories) {
         messages: [
           {
             role: "system",
-            content: `
-              For each subcategory in the list below, provide a JSON object with 3 related subtopics. Each subtopic should be a single string with up to 10 words, followed by a brief description.
-              The resulting JSON should be a single array containing all the subtopics with their descriptions. The structure should be as follows:
-                {"subtopic": "subtopic_1", "description": "Description of subtopic 1."},
-                {"subtopic": "subtopic_2", "description": "Description of subtopic 2."},
-                {"subtopic": "subtopic_3", "description": "Description of subtopic 3."},
-                {"subtopic": "subtopic_4", "description": "Description of subtopic 4."},
-              Ensure that the topics are highly relevant to each subcategory provided. Avoid generic or unrelated topics.
-              IMPORTANT: DO NOT RETURN TOPICS A, B, C. ACTUALLY FIND RELEVANT SUBTOPICS BASED ON THE SUBCATEGORIES.
-            `,
+            content: `以下のリストのサブカテゴリごとに、3 つの関連サブトピックを含む JSON オブジェクトを提供します。各サブトピックは、最大 10 単語からなる単一の文字列で、その後に簡単な説明が続きます。
+ 結果として得られる JSON は、すべてのサブトピックとその説明を含む単一の配列である必要があります。構造は次のようになります。
+ {"サブトピック": "サブトピック 1", "説明": "サブトピック 1 の説明。"},
+ {"サブトピック": "サブトピック 2", "説明": "サブトピック 2 の説明。"},
+ {"サブトピック": "サブトピック 3", "説明": "サブトピック 3 の説明。"},
+ {"サブトピック": "サブトピック 4", "説明": "サブトピック 4 の説明。"},
+ トピックが提供された各サブカテゴリとの関連性が高いことを確認してください。一般的なトピックや無関係なトピックは避けてください。
+ 重要: トピック A、B、C は返さないでください。実際には、サブカテゴリに基づいて関連するサブトピックを見つけてください。`,
           },
           {
             role: "user",
-            content: `ACTUALLY FIND RELEVANT SUBTOPICS BASED ON THE SUBCATEGORIES.
-              Subcategories: ${subcategoriesString}`,
+            content: `サブカテゴリに基づいて、関連するサブトピックを実際に見つけます。
+ サブカテゴリ: ${subcategoriesString}`,
           },
         ],
         response_format: zodResponseFormat(TopicsResponse, "event"),

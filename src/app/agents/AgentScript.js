@@ -19,14 +19,13 @@ export async function AgentScript(topic) {
         {
           role: "system",
           content: `
-      Generate a script for based on the following topic:
-      ${topic.subtopic}. Description: ${topic.description}.
-      The script should be engaging and relevant. Please format the script with clear headings, bullet points, and line breaks to make it easy to read. i will use the libary marked to formatting, so do bolds and jump lines.
-    `,
+    次のトピックに基づいてスクリプトを生成します。
+ ${topic.subtopic}。説明: ${topic.description}。
+ スクリプトは魅力的で関連性のあるものでなければなりません。読みやすいように、明確な見出し、箇条書き、改行を使用してスクリプトをフォーマットしてください。私はフォーマットするようにマークされたライブラリを使用し、太字とジャンプ行のみを実行します。`,
         },
         {
           role: "user",
-          content: `Generate a script for the following topic: ${topic.subtopic}.`,
+          content: `次のトピックのスクリプトを生成します。 ${topic.subtopic}.`,
         },
       ],
       response_format: zodResponseFormat(ScriptResponse, "event"),

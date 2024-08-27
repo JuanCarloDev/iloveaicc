@@ -47,8 +47,8 @@ export default function Home() {
             data-aos="fade"
             data-aos-delay={0 * animationDelay}
             data-aos-offset={0}
-            src="/wowmi.svg"
-            className="w-30"
+            src="/iloveai.png"
+            className="w-[10rem] h-auto"
           />
         </a>
       </div>
@@ -62,7 +62,7 @@ export default function Home() {
               data-aos-offset={0}
               className="text-black/80 font-semibold text-2xl"
             >
-              Select Your Industry
+              業界を選択してください
             </h1>
             <SearchBar
               data-aos="fade"
@@ -100,13 +100,13 @@ export default function Home() {
                   segmentSelected && handleSegmentClick(segmentSelected);
                 }}
                 className={`flex justify-end w-fit max-w-5xl ${
-                  loading || !segmentSelected ? "bg-zinc-300" : "bg-[#725df5]"
+                  loading || !segmentSelected ? "bg-zinc-300" : "bg-[#ff4b21]"
                 } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px] transition-all duration-500`}
               >
                 {loading ? (
                   <CircleNotch className="animate-spin h-6 opacity-20 w-6 text-white" />
                 ) : (
-                  <p>next</p>
+                  <p>次</p>
                 )}
               </button>
             </div>
@@ -124,7 +124,7 @@ export default function Home() {
                 data-aos-offset={0}
                 className="text-black/80 font-semibold text-2xl"
               >
-                Select Subcategories
+                サブカテゴリの選択
               </h1>
               <div
                 data-aos="fade"
@@ -175,14 +175,14 @@ export default function Home() {
                 }}
                 className={`flex justify-end w-fit max-w-5xl mt-4 ${
                   subcategoriesSelected.length > 0
-                    ? "bg-[#725df5]"
+                    ? "bg-[#ff4b21]"
                     : "bg-zinc-300"
                 } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
               >
                 {loading ? (
                   <CircleNotch className="animate-spin h-6 opacity-20 w-6 text-white" />
                 ) : (
-                  <p>next</p>
+                  <p>次</p>
                 )}
               </button>
             </div>
@@ -194,7 +194,7 @@ export default function Home() {
         <>
           <div className="flex w-full h-full max-w-5xl py-2 flex-col">
             <h1 className="text-black/80 font-semibold text-2xl">
-              Select Topics
+              トピックの選択
             </h1>
             {/* <p
               className={`text-black/50 font-semibold text-md ${
@@ -234,7 +234,7 @@ export default function Home() {
                 disabled={topicsSelected?.length === 0}
                 onClick={handleSubcategoriesSubmit}
                 className={`flex justify-end w-fit max-w-5xl mt-4 ${
-                  topicsSelected?.length > 0 ? "bg-[#725df5]" : "bg-zinc-300"
+                  topicsSelected?.length > 0 ? "bg-[#ff4b21]" : "bg-zinc-300"
                 } text-white flex justify-center items-center py-2 px-8 rounded-lg min-w-[120px]`}
               >
                 {loading ? (
@@ -250,68 +250,58 @@ export default function Home() {
     </main>
   );
 }
-
 const segments = {
   segments: [
     {
       id: 0,
-      name: "Mortgage",
-      description:
-        "Segment focused on technology advancements and innovations.",
+      name: "住宅ローン",
+      description: "技術の進歩とイノベーションに焦点を当てたセグメント。",
     },
     {
       id: 1,
-      name: "Technology",
-      description:
-        "Segment focused on technology advancements and innovations22.",
+      name: "テクノロジー",
+      description: "技術の進歩とイノベーションに焦点を当てたセグメント。",
     },
     {
       id: 2,
-      name: "Health & Wellness",
-      description:
-        "Segment centered around health, fitness, and overall well-being.",
+      name: "健康＆ウェルネス",
+      description: "健康、フィットネス、全体的な幸福に焦点を当てたセグメント。",
     },
     {
       id: 3,
-      name: "Finance",
-      description:
-        "Segment dedicated to financial management, investments, and economic trends.",
+      name: "金融",
+      description: "財務管理、投資、経済動向に専念したセグメント。",
     },
     {
       id: 4,
-      name: "Education",
-      description:
-        "Segment focused on learning, teaching methods, and educational tools.",
+      name: "教育",
+      description: "学習、教育方法、教育ツールに焦点を当てたセグメント。",
     },
     {
       id: 5,
-      name: "Entertainment",
+      name: "エンターテイメント",
       description:
-        "Segment focused on movies, music, games, and other forms of entertainment.",
+        "映画、音楽、ゲーム、その他のエンターテイメントに焦点を当てたセグメント。",
     },
     {
       id: 6,
-      name: "Travel & Tourism",
-      description:
-        "Segment dedicated to travel destinations, tips, and tourism trends.",
+      name: "旅行＆観光",
+      description: "旅行先、旅行のヒント、観光動向に専念したセグメント。",
     },
     {
       id: 7,
-      name: "Lifestyle",
-      description:
-        "Segment centered around fashion, culture, and everyday living.",
+      name: "ライフスタイル",
+      description: "ファッション、文化、日常生活に焦点を当てたセグメント。",
     },
     {
       id: 8,
-      name: "Food & Beverage",
-      description:
-        "Segment focused on culinary arts, dining experiences, and beverage trends.",
+      name: "食品＆飲料",
+      description: "料理芸術、食事体験、飲料動向に焦点を当てたセグメント。",
     },
     {
       id: 9,
-      name: "Real Estate",
-      description:
-        "Segment dedicated to property management, real estate markets, and housing trends.",
+      name: "不動産",
+      description: "不動産管理、不動産市場、住宅動向に専念したセグメント。",
     },
   ],
 };
