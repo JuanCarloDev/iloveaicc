@@ -3,8 +3,10 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
 export async function AgentScript(topic) {
-  const apiKey =
-    "sk-0LuQrvaVIBQvW2Ruevxu3vE-floqkPAr_bj049NHwKT3BlbkFJocz3X1IC9URgbF5L4dDbmjessUMh1OllBfpVUBOVAA";
+
+  const apiKey = process.env.OPENAI_API_KEY; // Obtém a chave da API do ambiente Next.js
+
+  console.log(apiKey)
 
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 

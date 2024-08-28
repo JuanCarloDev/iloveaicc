@@ -4,7 +4,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 
 export async function fetchSubcategories(segmentName) {
   const apiKey =
-    "sk-0LuQrvaVIBQvW2Ruevxu3vE-floqkPAr_bj049NHwKT3BlbkFJocz3X1IC9URgbF5L4dDbmjessUMh1OllBfpVUBOVAA";
+    process.env.OPENAI_API_KEY;
 
   const chat = new OpenAI({
     openAIApiKey: apiKey,
