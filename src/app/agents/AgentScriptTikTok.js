@@ -3,9 +3,11 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
 export async function AgentScriptTikTok(topic) {
-  const apiKey = process.env.OPENAI_API_KEY; 
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY; 
   console.log(apiKey)
   const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
+
+  console.log(apiKey)
 
   const ScriptResponse = z.object({
     script: z.string(), // Supondo que o script retornado seja uma string

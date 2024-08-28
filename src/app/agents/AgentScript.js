@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export async function AgentScript(topic) {
 
-  const apiKey = process.env.OPENAI_API_KEY; // Obtém a chave da API do ambiente Next.js
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY; // Obtém a chave da API do ambiente Next.js
 
   console.log(apiKey)
 
