@@ -39,6 +39,9 @@ export default function Home() {
 
   const animationDelay = 150;
 
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  console.log(apiKey);
+
   return (
     <main className="flex min-h-screen flex-col items-center bg-white px-6 pb-20">
       <div className="flex w-full max-w-5xl py-10">
